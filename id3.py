@@ -1,8 +1,13 @@
 import pandas as pd
+import warnings
 import pickle
 from sklearn.tree import DecisionTreeClassifier, export_text
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score
+from sklearn.exceptions import UndefinedMetricWarning
+
+# Mengabaikan warning
+warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 
 def decision_tree_without_pruning(X_train, y_train, X_test, y_test):
     dt_classifiers = []
