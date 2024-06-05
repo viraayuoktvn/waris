@@ -121,13 +121,15 @@ def save_model(model, filename):
         pickle.dump(model, file)
 
 # Load dataset
-dataset = pd.read_csv("all biner fix.csv", delimiter=";")
+dataset = pd.read_csv("all biner v3.csv", delimiter=";")
 
 # Set fitur-fitur (X) dan variabel target (y)
 X = dataset[['total_ap', 'total_al', 'total_cp', 'total_cl', 'total_suami', 'total_istri', 'total_ayah', 'total_ibu',
              'total_kakek', 'total_nenek', 'total_si', 'total_sdlk', 'total_sdpk']]
 y = dataset[['hw_ap', 'hw_al', 'hw_cp', 'hw_cl', 'hw_suami', 'hw_istri', 'hw_ayah', 'hw_ibu', 'hw_kakek', 'hw_nenek',
              'hw_si', 'hw_sdlk', 'hw_sdpk']]
+
+print(type(X))
 
 # Membagi dataset menjadi data latih dan data uji
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)

@@ -122,8 +122,7 @@ def hitung_bagian_ayah(ayah, anak_laki, anak_perempuan, cucu_laki, cucu_perempua
             if ibu > 0 or suami > 0 or istri > 0 or nenek > 0:
                 share_ayah = total_inheritance - (share_suami + share_istri + share_ibu + share_nenek)
         if anak_laki > 0 or cucu_laki > 0:
-            if (suami == 0 and istri == 0 and ibu == 0 and nenek == 0) or ((suami > 0 or istri > 0) and ibu == 0 and nenek == 0) or (suami == 0 and istri == 0 and (ibu > 0 or nenek > 0)):
-                share_ayah = (1 / 6) * total_inheritance
+            share_ayah = (1 / 6) * total_inheritance
         if anak_laki == 0 and cucu_laki == 0:
             if (anak_perempuan == 1 or cucu_perempuan == 1) and suami == 0 and istri == 0 and ibu == 0 and nenek == 0:
                 share_ayah = (1 / 4) * total_inheritance
