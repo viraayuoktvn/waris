@@ -60,49 +60,49 @@ def calculate_inheritance(total_assets, total_debts, will, medical_expenses, fun
 
 def main():
     # Input data
-    # while True:
-    #     try:
-    #         total_assets = float(input("Total harta kepemilikan: "))
-    #     except ValueError:
-    #         print("Input tidak valid. Masukkan angka.")
-    #         continue
-    #     break
+    while True:
+        try:
+            total_assets = float(input("Total harta kepemilikan: "))
+        except ValueError:
+            print("Input tidak valid. Masukkan angka.")
+            continue
+        break
 
-    # while True:
-    #     try:
-    #         total_debts = float(input("Total hutang: "))
-    #     except ValueError:
-    #         print("Input tidak valid. Masukkan angka.")
-    #         continue
-    #     break
+    while True:
+        try:
+            total_debts = float(input("Total hutang: "))
+        except ValueError:
+            print("Input tidak valid. Masukkan angka.")
+            continue
+        break
 
-    # while True:
-    #     try:
-    #         will = float(input("Total wasiat: "))
-    #     except ValueError:
-    #         print("Input tidak valid. Masukkan angka.")
-    #         continue
+    while True:
+        try:
+            will = float(input("Total wasiat: "))
+        except ValueError:
+            print("Input tidak valid. Masukkan angka.")
+            continue
 
-    #     if will > (total_assets / 3):
-    #         print("Wasiat tidak boleh lebih dari 1/3 bagian dari total harta kepemilikan!")
-    #         continue  # Tetap di dalam loop while untuk meminta input ulang
-    #     break
+        if will > (total_assets / 3):
+            print("Wasiat tidak boleh lebih dari 1/3 bagian dari total harta kepemilikan!")
+            continue  # Tetap di dalam loop while untuk meminta input ulang
+        break
 
-    # while True:
-    #     try:
-    #         medical_expenses = float(input("Biaya perawatan selama sakit: "))
-    #     except ValueError:
-    #         print("Input tidak valid. Masukkan angka.")
-    #         continue
-    #     break
+    while True:
+        try:
+            medical_expenses = float(input("Biaya perawatan selama sakit: "))
+        except ValueError:
+            print("Input tidak valid. Masukkan angka.")
+            continue
+        break
 
-    # while True:
-    #     try:
-    #         funeral_expenses = float(input("Biaya pengurusan jenazah: "))
-    #     except ValueError:
-    #         print("Input tidak valid. Masukkan angka.")
-    #         continue
-    #     break
+    while True:
+        try:
+            funeral_expenses = float(input("Biaya pengurusan jenazah: "))
+        except ValueError:
+            print("Input tidak valid. Masukkan angka.")
+            continue
+        break
 
     # Input jumlah dan nilai prediksi untuk setiap jenis anggota keluarga
     family_members = {}
@@ -111,35 +111,35 @@ def main():
     print("Masukkan jumlah anggota keluarga yang masih hidup!")
     print("Untuk anak, cucu, dan saudara masukkan maksimal 3. Sisanya masukkan 1 untuk ada dan 0 untuk tidak ada.")
 
-    # for relationship in ["ap", "al", "cp", "cl", "suami", "istri", "ayah", "ibu", "kakek", "nenek", "si", "sdlk", "sdpk"]:
-    #     while True:
-    #         try:
-    #             family_members[f"total_{relationship}"] = float(input(f"Total {relationship}: "))
-    #             break  # Keluar dari loop while setelah input valid
-    #         except ValueError:
-    #             print("Input tidak valid. Masukkan angka.")
+    for relationship in ["ap", "al", "cp", "cl", "suami", "istri", "ayah", "ibu", "kakek", "nenek", "si", "sdlk", "sdpk"]:
+        while True:
+            try:
+                family_members[f"total_{relationship}"] = float(input(f"Total {relationship}: "))
+                break  # Keluar dari loop while setelah input valid
+            except ValueError:
+                print("Input tidak valid. Masukkan angka.")
 
-    total_assets = 60950000
-    total_debts = 0
-    will = 0
-    medical_expenses = 0
-    funeral_expenses = 0
+    # total_assets = 60950000
+    # total_debts = 0
+    # will = 0
+    # medical_expenses = 0
+    # funeral_expenses = 0
 
-    family_members = {
-        "total_ap": 3,
-        "total_al": 0,
-        "total_cp": 2,
-        "total_cl": 0,
-        "total_suami": 1,
-        "total_istri": 0,
-        "total_ayah": 0,
-        "total_ibu": 1,
-        "total_kakek": 0,
-        "total_nenek": 0,
-        "total_si": 3,
-        "total_sdlk": 2,
-        "total_sdpk": 2
-    }
+    # family_members = {
+    #     "total_ap": 3,
+    #     "total_al": 0,
+    #     "total_cp": 2,
+    #     "total_cl": 0,
+    #     "total_suami": 1,
+    #     "total_istri": 0,
+    #     "total_ayah": 0,
+    #     "total_ibu": 1,
+    #     "total_kakek": 0,
+    #     "total_nenek": 0,
+    #     "total_si": 3,
+    #     "total_sdlk": 2,
+    #     "total_sdpk": 2
+    # }
 
     # dt_model = load_model("id3_without_pruning_model.pkl")
     dt_model = load_model("id3_without_pruning_model.pkl")
