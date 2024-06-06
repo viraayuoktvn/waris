@@ -76,6 +76,7 @@ def main():
             continue
         break
 
+    print("Jumlah wasiat tidak boleh lebih dari 1/3 total harta kepemilikan.")
     while True:
         try:
             will = float(input("Total wasiat: "))
@@ -109,7 +110,7 @@ def main():
 
     # Input jumlah anggota keluarga untuk masing-masing jenis hubungan
     print("Masukkan jumlah anggota keluarga yang masih hidup!")
-    print("Untuk anak, cucu, dan saudara masukkan maksimal 3. Sisanya masukkan 1 untuk ada dan 0 untuk tidak ada.")
+    print("Untuk suami, istri, ayah, ibu, kakek, dan nenek masukkan 1 untuk ada dan 0 untuk tidak ada.")
 
     for relationship in ["ap", "al", "cp", "cl", "suami", "istri", "ayah", "ibu", "kakek", "nenek", "si", "sdlk", "sdpk"]:
         while True:

@@ -316,7 +316,7 @@ df = pd.DataFrame(data)
 # Separate features and target
 X = df[['total_ap', 'total_al', 'total_cl', 'total_cp', 'total_suami', 'total_istri', 'total_ayah', 'total_ibu', 'total_kakek', 
         'total_nenek', 'total_si', 'total_sdlk', 'total_sdpk']]  # Features, remain as integer
-y = df[['hw_sdpk']]  # Target, remain as string
+y = df[['hw_al']]  # Target, remain as string
 
 start_time = time.time()
 dt_model = dt_c45(Xdata=X, ydata=y, pre_pruning=True, post_pruning=True)
