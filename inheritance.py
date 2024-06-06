@@ -1,3 +1,4 @@
+import pandas as pd
 import pickle
 import calc
 
@@ -7,10 +8,16 @@ def load_model(filename):
         models = pickle.load(file)
     return models
 
-# Membuat prediksi warisan
 def predict_inheritance(predictors, dt_model):
+    feature_names = ['total_ap', 'total_al', 'total_cp', 'total_cl', 'total_suami', 'total_istri', 
+                     'total_ayah', 'total_ibu', 'total_kakek', 'total_nenek', 'total_si', 
+                     'total_sdlk', 'total_sdpk']
+    
+    # Buat DataFrame dari predictors dengan nama kolom yang sesuai
+    predictors_df = pd.DataFrame([predictors], columns=feature_names)
+    
     model = dt_model['model']
-    prediction_proba = model.predict_proba([predictors])[0]
+    prediction_proba = model.predict_proba(predictors_df)[0]
     
     if prediction_proba[1] >= 0.5:
         prediction_string = 'TIDAK DAPAT'
@@ -25,10 +32,18 @@ def print_inheritance_status(inheritance_status):
         if status == "DAPAT":
             print(f"Status warisan untuk {relationship}: {status}")
 
-# Memuat model dan menghitung warisan
+# Fungsi untuk menghitung warisan
 def calculate_inheritance(total_assets, total_debts, will, medical_expenses, funeral_expenses, family_members, dt_model):
     inheritance_status = {}
     total_inheritance = total_assets - total_debts - will - medical_expenses - funeral_expenses
+
+    # Nama-nama fitur yang digunakan saat melatih model
+    feature_names = ['total_ap', 'total_al', 'total_cp', 'total_cl', 'total_suami', 'total_istri', 
+                     'total_ayah', 'total_ibu', 'total_kakek', 'total_nenek', 'total_si', 
+                     'total_sdlk', 'total_sdpk']
+
+    # Buat list dari family_members
+    predictors = [family_members[feature] for feature in feature_names]
 
     for relationship, _ in family_members.items():
         if relationship.startswith("total_"):
@@ -36,7 +51,8 @@ def calculate_inheritance(total_assets, total_debts, will, medical_expenses, fun
             if prediction_key not in dt_model:
                 print(f"Error: No model found for {prediction_key}")
                 continue
-            predictors = [family_members[key] for key in family_members.keys() if key.startswith("total_")]
+            
+            # Panggil fungsi predict_inheritance dengan list sebagai input
             prediction = predict_inheritance(predictors, dt_model[prediction_key])
             inheritance_status[relationship] = prediction
 
@@ -44,49 +60,49 @@ def calculate_inheritance(total_assets, total_debts, will, medical_expenses, fun
 
 def main():
     # Input data
-    while True:
-        try:
-            total_assets = float(input("Total harta kepemilikan: "))
-        except ValueError:
-            print("Input tidak valid. Masukkan angka.")
-            continue
-        break
+    # while True:
+    #     try:
+    #         total_assets = float(input("Total harta kepemilikan: "))
+    #     except ValueError:
+    #         print("Input tidak valid. Masukkan angka.")
+    #         continue
+    #     break
 
-    while True:
-        try:
-            total_debts = float(input("Total hutang: "))
-        except ValueError:
-            print("Input tidak valid. Masukkan angka.")
-            continue
-        break
+    # while True:
+    #     try:
+    #         total_debts = float(input("Total hutang: "))
+    #     except ValueError:
+    #         print("Input tidak valid. Masukkan angka.")
+    #         continue
+    #     break
 
-    while True:
-        try:
-            will = float(input("Total wasiat: "))
-        except ValueError:
-            print("Input tidak valid. Masukkan angka.")
-            continue
+    # while True:
+    #     try:
+    #         will = float(input("Total wasiat: "))
+    #     except ValueError:
+    #         print("Input tidak valid. Masukkan angka.")
+    #         continue
 
-        if will > (total_assets / 3):
-            print("Wasiat tidak boleh lebih dari 1/3 bagian dari total harta kepemilikan!")
-            continue  # Tetap di dalam loop while untuk meminta input ulang
-        break
+    #     if will > (total_assets / 3):
+    #         print("Wasiat tidak boleh lebih dari 1/3 bagian dari total harta kepemilikan!")
+    #         continue  # Tetap di dalam loop while untuk meminta input ulang
+    #     break
 
-    while True:
-        try:
-            medical_expenses = float(input("Biaya perawatan selama sakit: "))
-        except ValueError:
-            print("Input tidak valid. Masukkan angka.")
-            continue
-        break
+    # while True:
+    #     try:
+    #         medical_expenses = float(input("Biaya perawatan selama sakit: "))
+    #     except ValueError:
+    #         print("Input tidak valid. Masukkan angka.")
+    #         continue
+    #     break
 
-    while True:
-        try:
-            funeral_expenses = float(input("Biaya pengurusan jenazah: "))
-        except ValueError:
-            print("Input tidak valid. Masukkan angka.")
-            continue
-        break
+    # while True:
+    #     try:
+    #         funeral_expenses = float(input("Biaya pengurusan jenazah: "))
+    #     except ValueError:
+    #         print("Input tidak valid. Masukkan angka.")
+    #         continue
+    #     break
 
     # Input jumlah dan nilai prediksi untuk setiap jenis anggota keluarga
     family_members = {}
@@ -95,35 +111,35 @@ def main():
     print("Masukkan jumlah anggota keluarga yang masih hidup!")
     print("Untuk anak, cucu, dan saudara masukkan maksimal 3. Sisanya masukkan 1 untuk ada dan 0 untuk tidak ada.")
 
-    for relationship in ["ap", "al", "cp", "cl", "suami", "istri", "ayah", "ibu", "kakek", "nenek", "si", "sdlk", "sdpk"]:
-        while True:
-            try:
-                family_members[f"total_{relationship}"] = float(input(f"Total {relationship}: "))
-                break  # Keluar dari loop while setelah input valid
-            except ValueError:
-                print("Input tidak valid. Masukkan angka.")
+    # for relationship in ["ap", "al", "cp", "cl", "suami", "istri", "ayah", "ibu", "kakek", "nenek", "si", "sdlk", "sdpk"]:
+    #     while True:
+    #         try:
+    #             family_members[f"total_{relationship}"] = float(input(f"Total {relationship}: "))
+    #             break  # Keluar dari loop while setelah input valid
+    #         except ValueError:
+    #             print("Input tidak valid. Masukkan angka.")
 
-    # total_assets = 60950000
-    # total_debts = 0
-    # will = 0
-    # medical_expenses = 0
-    # funeral_expenses = 0
+    total_assets = 60950000
+    total_debts = 0
+    will = 0
+    medical_expenses = 0
+    funeral_expenses = 0
 
-    # family_members = {
-    #     "total_ap": 3,
-    #     "total_al": 0,
-    #     "total_cp": 2,
-    #     "total_cl": 0,
-    #     "total_suami": 1,
-    #     "total_istri": 0,
-    #     "total_ayah": 0,
-    #     "total_ibu": 1,
-    #     "total_kakek": 0,
-    #     "total_nenek": 0,
-    #     "total_si": 3,
-    #     "total_sdlk": 2,
-    #     "total_sdpk": 2
-    # }
+    family_members = {
+        "total_ap": 3,
+        "total_al": 0,
+        "total_cp": 2,
+        "total_cl": 0,
+        "total_suami": 1,
+        "total_istri": 0,
+        "total_ayah": 0,
+        "total_ibu": 1,
+        "total_kakek": 0,
+        "total_nenek": 0,
+        "total_si": 3,
+        "total_sdlk": 2,
+        "total_sdpk": 2
+    }
 
     # dt_model = load_model("id3_without_pruning_model.pkl")
     dt_model = load_model("id3_without_pruning_model.pkl")
