@@ -296,11 +296,11 @@ def dt_c45(Xdata, ydata, pre_pruning, post_pruning, chi_lim=0.1, min_lim=10):
 
     if post_pruning:
         pruned_rules = []
-        for r in rule[:-2]:  # Exclude the "Total Number of Rules" and "Default Value" rules
+        for r in rule[:-2]: 
             if chi_squared_test(dataset.iloc[:, 0], dataset.iloc[:, 1]) > chi_lim:
                 pruned_rules.append(r)
-        pruned_rules.append(rule[-2])  # Append the "Total Number of Rules" rule
-        pruned_rules.append(rule[-1])  # Append the "Default Value" rule
+        pruned_rules.append(rule[-2])
+        pruned_rules.append(rule[-1])
         rule = pruned_rules
 
     rule.append("Total Number of Rules: " + str(len(rule)))

@@ -86,7 +86,7 @@ def main():
 
         if will > (total_assets / 3):
             print("Wasiat tidak boleh lebih dari 1/3 bagian dari total harta kepemilikan!")
-            continue  # Tetap di dalam loop while untuk meminta input ulang
+            continue
         break
 
     while True:
@@ -119,28 +119,6 @@ def main():
                 break  # Keluar dari loop while setelah input valid
             except ValueError:
                 print("Input tidak valid. Masukkan angka.")
-
-    # total_assets = 60950000
-    # total_debts = 0
-    # will = 0
-    # medical_expenses = 0
-    # funeral_expenses = 0
-
-    # family_members = {
-    #     "total_ap": 3,
-    #     "total_al": 0,
-    #     "total_cp": 2,
-    #     "total_cl": 0,
-    #     "total_suami": 1,
-    #     "total_istri": 0,
-    #     "total_ayah": 0,
-    #     "total_ibu": 1,
-    #     "total_kakek": 0,
-    #     "total_nenek": 0,
-    #     "total_si": 3,
-    #     "total_sdlk": 2,
-    #     "total_sdpk": 2
-    # }
 
     # dt_model = load_model("id3_without_pruning_model.pkl")
     dt_model = load_model("id3_without_pruning_model.pkl")
