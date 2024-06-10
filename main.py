@@ -36,35 +36,43 @@ class InheritanceApp:
 
         # Main frame
         main_frame = ttk.Frame(self.root, padding="10")
-        main_frame.grid(row=0, column=0, sticky=(tk.N, tk.S, tk.E, tk.W))  # Use grid with sticky to fill the space
+        main_frame.grid(row=0, column=0, sticky=(tk.N, tk.S, tk.E, tk.W))
 
         # Configure grid for root and main_frame to ensure resizing behavior
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
-        main_frame.grid_rowconfigure(20, weight=1)  # Ensure the last row (result frame) grows
+        main_frame.grid_rowconfigure(21, weight=1)  # Ensure the last row (result frame) grows
+        main_frame.grid_columnconfigure(0, weight=1)
+        main_frame.grid_columnconfigure(1, weight=1)
+
+        # Instruction message
+        instruction_label = ttk.Label(main_frame, text="Semua kolom harus diisi! Jika tidak ada tanggungan atau anggota keluarga tertentu isi dengan 0.", font=self.label_font, foreground="red")
+        instruction_label.grid(row=0, column=0, columnspan=2, pady=(0, 10), padx=7, sticky="n")
+
+        # Configure grid column to expand
         main_frame.grid_columnconfigure(0, weight=1)
         main_frame.grid_columnconfigure(1, weight=1)
 
         # Input fields
-        ttk.Label(main_frame, text="Total harta kepemilikan:", font=self.label_font).grid(row=0, column=0, pady=2, padx=(7, 20), sticky=tk.E)
+        ttk.Label(main_frame, text="Total harta kepemilikan:", font=self.label_font).grid(row=1, column=0, pady=2, padx=(7, 20), sticky=tk.E)
         self.total_assets = ttk.Entry(main_frame, font=self.default_font, width=20)
-        self.total_assets.grid(row=0, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+        self.total_assets.grid(row=1, column=1, pady=2, padx=(20, 7), sticky=tk.W)
 
-        ttk.Label(main_frame, text="Total hutang:", font=self.label_font).grid(row=1, column=0, pady=2, padx=(7, 20), sticky=tk.E)
+        ttk.Label(main_frame, text="Total hutang:", font=self.label_font).grid(row=2, column=0, pady=2, padx=(7, 20), sticky=tk.E)
         self.total_debts = ttk.Entry(main_frame, font=self.default_font, width=20)
-        self.total_debts.grid(row=1, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+        self.total_debts.grid(row=2, column=1, pady=2, padx=(20, 7), sticky=tk.W)
 
-        ttk.Label(main_frame, text="Total wasiat:", font=self.label_font).grid(row=2, column=0, pady=2, padx=(7, 20), sticky=tk.E)
+        ttk.Label(main_frame, text="Total wasiat:", font=self.label_font).grid(row=3, column=0, pady=2, padx=(7, 20), sticky=tk.E)
         self.will = ttk.Entry(main_frame, font=self.default_font, width=20)
-        self.will.grid(row=2, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+        self.will.grid(row=3, column=1, pady=2, padx=(20, 7), sticky=tk.W)
 
-        ttk.Label(main_frame, text="Biaya perawatan selama sakit:", font=self.label_font).grid(row=3, column=0, pady=2, padx=(7, 20), sticky=tk.E)
+        ttk.Label(main_frame, text="Biaya perawatan selama sakit:", font=self.label_font).grid(row=4, column=0, pady=2, padx=(7, 20), sticky=tk.E)
         self.medical_expenses = ttk.Entry(main_frame, font=self.default_font, width=20)
-        self.medical_expenses.grid(row=3, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+        self.medical_expenses.grid(row=4, column=1, pady=2, padx=(20, 7), sticky=tk.W)
 
-        ttk.Label(main_frame, text="Biaya pengurusan jenazah:", font=self.label_font).grid(row=4, column=0, pady=2, padx=(7, 20), sticky=tk.E)
+        ttk.Label(main_frame, text="Biaya pengurusan jenazah:", font=self.label_font).grid(row=5, column=0, pady=2, padx=(7, 20), sticky=tk.E)
         self.funeral_expenses = ttk.Entry(main_frame, font=self.default_font, width=20)
-        self.funeral_expenses.grid(row=4, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+        self.funeral_expenses.grid(row=5, column=1, pady=2, padx=(20, 7), sticky=tk.W)
 
         # Family member inputs
         self.family_members = {}
@@ -85,21 +93,21 @@ class InheritanceApp:
         }
         
         for i, (key, label) in enumerate(family_labels.items()):
-            ttk.Label(main_frame, text=f"Total {label}:", font=self.label_font).grid(row=5+i, column=0, pady=2, padx=(7, 20), sticky=tk.E)
+            ttk.Label(main_frame, text=f"Total {label}:", font=self.label_font).grid(row=6+i, column=0, pady=2, padx=(7, 20), sticky=tk.E)
             self.family_members[key] = ttk.Entry(main_frame, font=self.default_font, width=20)
-            self.family_members[key].grid(row=5+i, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+            self.family_members[key].grid(row=6+i, column=1, pady=2, padx=(20, 7), sticky=tk.W)
 
         # Calculate button
         self.calculate_button = ttk.Button(main_frame, text="Calculate", command=self.calculate_inheritance, style='TButton')
-        self.calculate_button.grid(row=18, column=0, columnspan=2, pady=5)
+        self.calculate_button.grid(row=19, column=0, columnspan=2, pady=5)
 
         # Result display
         result_frame = ttk.Frame(main_frame)
-        result_frame.grid(row=19, column=0, columnspan=2, pady=5, padx=7, sticky=(tk.N, tk.S, tk.E, tk.W))
+        result_frame.grid(row=20, column=0, columnspan=2, pady=5, padx=7, sticky=(tk.N, tk.S, tk.E, tk.W))
         result_frame.grid_rowconfigure(0, weight=1)
         result_frame.grid_columnconfigure(0, weight=1)
 
-        self.result_text = tk.Text(result_frame, height=50, width=30, font=self.result_font, wrap=tk.WORD)
+        self.result_text = tk.Text(result_frame, height=10, width=30, font=self.result_font, wrap=tk.WORD)
         self.result_text.grid(row=0, column=0, sticky=(tk.N, tk.S, tk.E, tk.W))
 
         # Add scrollbar to the result text
@@ -143,19 +151,19 @@ class InheritanceApp:
         ]
         
         family_labels = {
-            "ap": "Anak perempuan",
-            "al": "Anak laki-laki",
-            "cp": "Cucu perempuan",
-            "cl": "Cucu laki-laki",
-            "suami": "Suami",
-            "istri": "Istri",
-            "ayah": "Ayah",
-            "ibu": "Ibu",
-            "kakek": "Kakek",
-            "nenek": "Nenek",
-            "si": "Saudara seibu",
-            "sdlk": "Saudara laki-laki kandung",
-            "sdpk": "Saudara perempuan kandung"
+            "ap": "anak perempuan",
+            "al": "anak laki-laki",
+            "cp": "cucu perempuan",
+            "cl": "cucu laki-laki",
+            "suami": "suami",
+            "istri": "istri",
+            "ayah": "ayah",
+            "ibu": "ibu",
+            "kakek": "kakek",
+            "nenek": "nenek",
+            "si": "saudara seibu",
+            "sdlk": "saudara laki-laki kandung",
+            "sdpk": "saudara perempuan kandung"
         }
 
         for key, label in family_labels.items():
@@ -163,15 +171,24 @@ class InheritanceApp:
 
         # Validate the inputs
         invalid_fields = []
+        non_numeric_fields = []
         for label, field in input_fields:
-            try:
-                value = float(field.get())
-            except ValueError:
+            if not field.get():
                 invalid_fields.append(label)
+            else:
+                try:
+                    float(field.get())
+                except ValueError:
+                    non_numeric_fields.append(label)
 
         if invalid_fields:
             invalid_fields_str = ", ".join(invalid_fields)
-            messagebox.showerror("Input Error", f"Please enter a valid number for: {invalid_fields_str}.")
+            messagebox.showerror("Input Error", f"Semua kolom harus diisi! {invalid_fields_str} belum terisi.")
+            return
+
+        if non_numeric_fields:
+            non_numeric_fields_str = ", ".join(non_numeric_fields)
+            messagebox.showerror("Input Error", f"Kolom berikut harus diisi dengan angka yang valid: {non_numeric_fields_str}.")
             return
 
         # Proceed with the calculation if all inputs are valid
@@ -189,6 +206,14 @@ class InheritanceApp:
         family_members = {f"total_{key}": float(self.family_members[key].get()) for key in self.family_members}
         
         total_inheritance = total_assets - total_debts - will - medical_expenses - funeral_expenses
+        
+        # Check if the total of debts, will, medical expenses, and funeral expenses exceeds total assets
+        if total_debts + will + medical_expenses + funeral_expenses > total_assets:
+            total_inheritance = 0
+            self.result_text.delete(1.0, tk.END)
+            self.result_text.insert(tk.END, "Tidak ada harta waris yang dapat dibagi. Tanggungan yang harus dibayar melebihi total harta yang dimiliki, tolong selesaikan permasalahan tersebut dahulu.")
+            return
+
         inheritance_status = {}
         
         feature_names = ['total_ap', 'total_al', 'total_cp', 'total_cl', 'total_suami', 'total_istri', 
@@ -284,6 +309,6 @@ class InheritanceApp:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.geometry("800x630")  # Set the initial size of the window
+    root.geometry("650x630")  # Set the initial size of the window
     app = InheritanceApp(root)
     root.mainloop()
