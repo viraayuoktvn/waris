@@ -206,6 +206,13 @@ class InheritanceApp:
             messagebox.showerror("Input Error", f"Kolom berikut harus diisi dengan angka yang valid: {non_numeric_fields_str}.")
             return
 
+        # Check if both suami and istri are filled
+        if float(self.family_members["suami"].get()) > 0 and float(self.family_members["istri"].get()) > 0:
+            self.result_text.delete(1.0, tk.END)
+            self.result_text.insert(tk.END, "Pilih salah satu antara suami atau istri! Tidak boleh pilih keduanya.\n", 'error')
+            self.result_text.tag_config('error', foreground='red')
+            return
+
         # Proceed with the calculation if all inputs are valid
         total_assets = float(self.total_assets.get())
         total_debts = float(self.total_debts.get())
@@ -233,8 +240,8 @@ class InheritanceApp:
         inheritance_status = {}
         
         feature_names = ['total_ap', 'total_al', 'total_cp', 'total_cl', 'total_suami', 'total_istri', 
-                         'total_ayah', 'total_ibu', 'total_kakek', 'total_nenek', 'total_si', 
-                         'total_sdlk', 'total_sdpk']
+                        'total_ayah', 'total_ibu', 'total_kakek', 'total_nenek', 'total_si', 
+                        'total_sdlk', 'total_sdpk']
         predictors = [family_members[feature] for feature in feature_names]
         
         for relationship, _ in family_members.items():
@@ -248,6 +255,7 @@ class InheritanceApp:
                 inheritance_status[relationship] = prediction
         
         self.display_results(total_inheritance, inheritance_status, family_members)
+
     
     def display_results(self, total_inheritance, inheritance_status, family_members):
         self.result_text.delete(1.0, tk.END)
