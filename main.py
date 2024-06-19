@@ -30,9 +30,9 @@ class InheritanceApp:
 
     def create_widgets(self):
         # Define fonts
-        self.default_font = ("Helvetica", 8)
-        self.label_font = ("Helvetica", 8, "bold")
-        self.result_font = ("Helvetica", 8)
+        self.default_font = ("Helvetica", 9)
+        self.label_font = ("Helvetica", 9, "bold")
+        self.result_font = ("Helvetica", 9)
 
         # Main frame
         main_frame = ttk.Frame(self.root, padding="10")
@@ -44,35 +44,27 @@ class InheritanceApp:
         main_frame.grid_rowconfigure(21, weight=1)  # Ensure the last row (result frame) grows
         main_frame.grid_columnconfigure(0, weight=1)
         main_frame.grid_columnconfigure(1, weight=1)
+        main_frame.grid_columnconfigure(2, weight=1)  # Added for the result frame
 
-        # Instruction message
-        instruction_label = ttk.Label(main_frame, text="Semua kolom harus diisi! Jika tidak ada tanggungan atau anggota keluarga tertentu isi dengan 0.", font=self.label_font, foreground="red")
-        instruction_label.grid(row=0, column=0, columnspan=2, pady=(0, 10), padx=7, sticky="n")
-
-        # Configure grid column to expand
-        main_frame.grid_columnconfigure(0, weight=1)
-        main_frame.grid_columnconfigure(1, weight=1)
+        # Title
+        instruction_label = ttk.Label(main_frame, text="PEMBAGIAN WARIS MENURUT HUKUM ISLAM", font=(self.label_font[0], 14, "bold"))
+        instruction_label.grid(row=0, column=0, columnspan=3, pady=(0, 10), padx=7, sticky="n")
 
         # Input fields
-        ttk.Label(main_frame, text="Total harta kepemilikan:", font=self.label_font).grid(row=1, column=0, pady=2, padx=(7, 20), sticky=tk.E)
-        self.total_assets = ttk.Entry(main_frame, font=self.default_font, width=20)
-        self.total_assets.grid(row=1, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+        self.create_custom_label(main_frame, "Total harta kepemilikan*:", 2)
+        self.total_assets = self.create_entry(main_frame, 2)
 
-        ttk.Label(main_frame, text="Total hutang:", font=self.label_font).grid(row=2, column=0, pady=2, padx=(7, 20), sticky=tk.E)
-        self.total_debts = ttk.Entry(main_frame, font=self.default_font, width=20)
-        self.total_debts.grid(row=2, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+        self.create_custom_label(main_frame, "Total hutang*:", 3)
+        self.total_debts = self.create_entry(main_frame, 3)
 
-        ttk.Label(main_frame, text="Total wasiat:", font=self.label_font).grid(row=3, column=0, pady=2, padx=(7, 20), sticky=tk.E)
-        self.will = ttk.Entry(main_frame, font=self.default_font, width=20)
-        self.will.grid(row=3, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+        self.create_custom_label(main_frame, "Total wasiat*:", 4)
+        self.will = self.create_entry(main_frame, 4)
 
-        ttk.Label(main_frame, text="Biaya perawatan selama sakit:", font=self.label_font).grid(row=4, column=0, pady=2, padx=(7, 20), sticky=tk.E)
-        self.medical_expenses = ttk.Entry(main_frame, font=self.default_font, width=20)
-        self.medical_expenses.grid(row=4, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+        self.create_custom_label(main_frame, "Biaya perawatan selama sakit*:", 5)
+        self.medical_expenses = self.create_entry(main_frame, 5)
 
-        ttk.Label(main_frame, text="Biaya pengurusan jenazah:", font=self.label_font).grid(row=5, column=0, pady=2, padx=(7, 20), sticky=tk.E)
-        self.funeral_expenses = ttk.Entry(main_frame, font=self.default_font, width=20)
-        self.funeral_expenses.grid(row=5, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+        self.create_custom_label(main_frame, "Biaya pengurusan jenazah*:", 6)
+        self.funeral_expenses = self.create_entry(main_frame, 6)
 
         # Family member inputs
         self.family_members = {}
@@ -91,23 +83,30 @@ class InheritanceApp:
             "sdlk": "Saudara laki-laki kandung",
             "sdpk": "Saudara perempuan kandung"
         }
-        
+
         for i, (key, label) in enumerate(family_labels.items()):
-            ttk.Label(main_frame, text=f"Total {label}:", font=self.label_font).grid(row=6+i, column=0, pady=2, padx=(7, 20), sticky=tk.E)
-            self.family_members[key] = ttk.Entry(main_frame, font=self.default_font, width=20)
-            self.family_members[key].grid(row=6+i, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+            self.create_custom_label(main_frame, f"Jumlah {label}*:", 7 + i)
+            self.family_members[key] = self.create_entry(main_frame, 7 + i)
+
+        # Add asterisk information label
+        asterisk_info_label = ttk.Label(main_frame, text="Kolom yang bertanda bintang (*) wajib diisi. Jika tidak ada tanggungan atau anggota keluarga, isi dengan 0.", font=self.default_font, foreground='red')
+        asterisk_info_label.grid(row=20, column=0, columnspan=2, pady=10, sticky=tk.W)
 
         # Calculate button
         self.calculate_button = ttk.Button(main_frame, text="Calculate", command=self.calculate_inheritance, style='TButton')
-        self.calculate_button.grid(row=19, column=0, columnspan=2, pady=5)
+        self.calculate_button.grid(row=21, column=0, columnspan=2, pady=5)
+
+        # Result label
+        result_label = ttk.Label(main_frame, text="Hasil Perhitungan:", font=self.label_font)
+        result_label.grid(row=1, column=2, pady=(0, 10), padx=7, sticky="n")
 
         # Result display
         result_frame = ttk.Frame(main_frame)
-        result_frame.grid(row=20, column=0, columnspan=2, pady=5, padx=7, sticky=(tk.N, tk.S, tk.E, tk.W))
+        result_frame.grid(row=2, column=2, rowspan=18, pady=5, padx=7, sticky=(tk.N, tk.S, tk.E, tk.W))
         result_frame.grid_rowconfigure(0, weight=1)
         result_frame.grid_columnconfigure(0, weight=1)
 
-        self.result_text = tk.Text(result_frame, height=10, width=30, font=self.result_font, wrap=tk.WORD)
+        self.result_text = tk.Text(result_frame, height=30, width=30, font=self.result_font, wrap=tk.WORD)
         self.result_text.grid(row=0, column=0, sticky=(tk.N, tk.S, tk.E, tk.W))
 
         # Add scrollbar to the result text
@@ -121,6 +120,22 @@ class InheritanceApp:
         style.configure('TLabel', font=self.label_font)
         style.configure('TEntry', font=self.default_font)
 
+    def create_custom_label(self, parent, text, row):
+        label_text, asterisk = text.split('*')
+        label_frame = ttk.Frame(parent)
+        label_frame.grid(row=row, column=0, pady=2, padx=(7, 20), sticky=tk.E)
+
+        label = ttk.Label(label_frame, text=label_text, font=self.label_font)
+        label.pack(side=tk.LEFT)
+
+        asterisk_label = ttk.Label(label_frame, text='*', font=self.label_font, foreground='red')
+        asterisk_label.pack(side=tk.LEFT)
+
+    def create_entry(self, parent, row):
+        entry = ttk.Entry(parent, font=self.default_font, width=20)
+        entry.grid(row=row, column=1, pady=2, padx=(20, 7), sticky=tk.W)
+        return entry
+
     def center_window(self):
         self.root.update_idletasks()
         width = self.root.winfo_width()
@@ -131,8 +146,8 @@ class InheritanceApp:
 
     def predict_inheritance(self, predictors, dt_model):
         feature_names = ['total_ap', 'total_al', 'total_cp', 'total_cl', 'total_suami', 'total_istri', 
-                         'total_ayah', 'total_ibu', 'total_kakek', 'total_nenek', 'total_si', 
-                         'total_sdlk', 'total_sdpk']
+                            'total_ayah', 'total_ibu', 'total_kakek', 'total_nenek', 'total_si', 
+                            'total_sdlk', 'total_sdpk']
         
         predictors_df = pd.DataFrame([predictors], columns=feature_names)
         model = dt_model['model']
@@ -167,7 +182,7 @@ class InheritanceApp:
         }
 
         for key, label in family_labels.items():
-            input_fields.append((f"Total {label}", self.family_members[key]))
+            input_fields.append((f"Jumlah {label}", self.family_members[key]))
 
         # Validate the inputs
         invalid_fields = []
@@ -211,7 +226,8 @@ class InheritanceApp:
         if total_debts + will + medical_expenses + funeral_expenses > total_assets:
             total_inheritance = 0
             self.result_text.delete(1.0, tk.END)
-            self.result_text.insert(tk.END, "Tidak ada harta waris yang dapat dibagi. Tanggungan yang harus dibayar melebihi total harta yang dimiliki, tolong selesaikan permasalahan tersebut dahulu.")
+            self.result_text.insert(tk.END, "Tidak ada harta waris yang dapat dibagi. Tanggungan yang harus dibayar melebihi total harta yang dimiliki, tolong selesaikan permasalahan tersebut dahulu.", 'error')
+            self.result_text.tag_config('error', foreground='red')
             return
 
         inheritance_status = {}
@@ -309,6 +325,6 @@ class InheritanceApp:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.geometry("650x630")  # Set the initial size of the window
+    root.geometry("950x630")  # Adjusted window size for better fit
     app = InheritanceApp(root)
     root.mainloop()
