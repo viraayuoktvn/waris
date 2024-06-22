@@ -7,6 +7,10 @@ from copy import deepcopy
 from scipy import stats
 import time
 import pickle
+import warnings
+
+# Ignore specific warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 # Function: Returns True if a Column is Numeric
 def is_number(string):
@@ -39,6 +43,7 @@ def chi_squared_test(label_df, feature_df):
     else:
         p_value = stats.chi2_contingency(contingency_table, correction=False) # (No Yates' Correction)
     return p_value[1]
+
 # Fungsi untuk prediksi menggunakan decision tree model
 def prediction_dt_c45(model, Xdata):
     Xdata = Xdata.reset_index(drop=True)
@@ -117,7 +122,7 @@ def info_gain_ratio(target, feature=[], uniques=[]):
         numerator_1 = data.iloc[:,0][(data.iloc[:,0] == np.unique(target)[entp])].count()
         if numerator_1 > 0:
             entropy = entropy - (numerator_1/denominator_1) * np.log2((numerator_1/denominator_1))
-    info_gain = float(entropy)
+    info_gain = float(entropy.iloc[0])
     info_gain_r = 0
     intrinsic_v = 0
     for word in range(0, len(uniques)):
@@ -130,7 +135,7 @@ def info_gain_ratio(target, feature=[], uniques=[]):
                 info_gain = info_gain + (denominator_2/denominator_1) * (numerator_2/denominator_2) * np.log2((numerator_2/denominator_2))
     if intrinsic_v[0] > 0:
         info_gain_r = info_gain/intrinsic_v
-    return float(info_gain_r)
+    return float(info_gain_r.iloc[0])
 
 # Function: Binary Split on Continuous Variables
 def split_me(feature, split):
@@ -349,4 +354,3 @@ recall = recall_score(y_test, y_pred, pos_label='Dapat')
 print("Accuracy:", accuracy)
 print("Precision:", precision)
 print("Recall:", recall)
-
