@@ -5,8 +5,8 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score
 from copy import deepcopy
 from scipy import stats
 import time
-import pickle
 
+# Function: Returns True if a Column is Numeric
 def is_number(string):
     for i in range(0, len(string)):
         if pd.isnull(string[i]) == False:
@@ -16,6 +16,7 @@ def is_number(string):
             except ValueError:
                 return False
 
+# Fungsi untuk memeriksa apakah nilai adalah angka
 def is_number_value(value):
     try:
         float(value)
@@ -23,6 +24,7 @@ def is_number_value(value):
     except ValueError:
         return False
 
+# Function: Performs a Chi-Squared Test or Fisher Exact Test
 def chi_squared_test(label_df, feature_df):
     label_df.reset_index(drop=True, inplace=True)
     feature_df.reset_index(drop=True, inplace=True)
@@ -36,12 +38,14 @@ def chi_squared_test(label_df, feature_df):
         p_value = stats.chi2_contingency(contingency_table, correction=False) # (No Yates' Correction)
     return p_value[1]
 
+# Fungsi untuk prediksi menggunakan decision tree model
 def prediction_dt_c45(model, Xdata):
     Xdata = Xdata.reset_index(drop=True)
     ydata = pd.DataFrame(index=range(0, Xdata.shape[0]), columns=[y.columns[0]])
     data = pd.concat([ydata, Xdata], axis=1)
     rule = []
 
+    # Preprocessing - Handling Boolean Values
     for column in data.columns:
         if data[column].dtype == "bool":
             data[column] = data[column].astype(str)
@@ -68,9 +72,10 @@ def prediction_dt_c45(model, Xdata):
             for k in range(0, len(rule[j]) - 2, 2):
                 if rule[j][k].isdigit() and int(rule[j][k]) < Xdata.shape[1]:
                     column_name = Xdata.columns[int(rule[j][k])]
-                elif rule[j][k] not in ['Dapat', 'Tidak Dapat']:
+                elif rule[j][k] not in ['Dapat', 'Tidak Dapat']: # Jika bukan target, anggap sebagai nama kolom
                     column_name = rule[j][k]
                 else:
+                    # Jika string tersebut adalah nilai target, lanjutkan ke langkah berikutnya
                     continue
 
                 if is_number_value(data[column_name][i]) == False:
@@ -102,6 +107,7 @@ def prediction_dt_c45(model, Xdata):
 
     return data
 
+# Function: Calculates the Information Gain Ratio
 def info_gain_ratio(target, feature, uniques):
     entropy = 0
     denominator_1 = feature.count()
@@ -130,6 +136,7 @@ def info_gain_ratio(target, feature, uniques):
     
     return float(info_gain_r.iloc[0])
 
+# Function: Binary Split on Continuous Variables
 def split_me(feature, split):
     result = pd.DataFrame(feature.values.reshape((feature.shape[0], 1)))
     result = result.astype(str)  # Mengubah tipe data kolom menjadi string
@@ -146,18 +153,22 @@ def split_me(feature, split):
     return result, binary_split
 
 def dt_c45(Xdata, ydata, pre_pruning, post_pruning, chi_lim=0.1, min_lim=10):
-    name = ydata.columns[0]
-    ydata = pd.DataFrame(ydata.values.reshape((ydata.shape[0], 1)))
+    # Preprocessing - Creating Dataframe
+    name = ydata.columns[0] # Mengambil nama kolom pertama dari DataFrame ydata
+    ydata = pd.DataFrame(ydata.values.reshape((ydata.shape[0], 1))) 
     for j in range(ydata.shape[1]):
         for i in range(ydata.shape[0]):
             if ydata.iloc[i, j] not in ['Dapat', 'Tidak Dapat']:
+                # Ubah nilai yang tidak valid menjadi 'Tidak Dapat'
                 ydata.iloc[i, j] = 'Tidak Dapat'
     dataset = pd.concat([ydata, Xdata], axis=1)
 
+    # Preprocessing - Boolean Values
     for j in range(0, dataset.shape[1]):
         if dataset.iloc[:, j].dtype == "bool":
             dataset.iloc[:, j] = dataset.iloc[:, j].astype(str)
 
+    # Preprocessing - Unique Words List
     unique = []
     uniqueWords = []
     for j in range(0, dataset.shape[1]):
@@ -168,6 +179,7 @@ def dt_c45(Xdata, ydata, pre_pruning, post_pruning, chi_lim=0.1, min_lim=10):
         uniqueWords.append(unique)
         unique = []
 
+    # Preprocessing - Label Matrix
     label = np.array(uniqueWords[0])
     label = label.reshape(1, len(uniqueWords[0]))
 
