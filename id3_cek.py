@@ -3,8 +3,7 @@ import numpy as np
 import pickle
 from sklearn.tree import DecisionTreeClassifier, export_text
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, precision_score, recall_score
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix
 
 def entropy(column):
     probabilities = column.value_counts(normalize=True)
@@ -166,15 +165,15 @@ def save_model(model, filename):
     with open(filename, 'wb') as file:
         pickle.dump(model, file)
 
-def print_confusion_matrix(y_test, y_pred, column_name):
-    cm = confusion_matrix(y_test, y_pred)
-    tn, fp, fn, tp = cm.ravel()
+def print_confusion_matrix(y_test, y_pred, column_name, positive_label, negative_label):
+    cm = confusion_matrix(y_test, y_pred, labels=[positive_label, negative_label])
     print(f"Confusion Matrix for {column_name}:")
     print(cm)
-    print(f"True Positives (TP): {tp}")
-    print(f"True Negatives (TN): {tn}")
-    print(f"False Positives (FP): {fp}")
-    print(f"False Negatives (FN): {fn}")
+    tn, fp, fn, tp = cm.ravel()
+    print(f"True Positives (TP, {positive_label}): {tp}")
+    print(f"True Negatives (TN, {negative_label}): {tn}")
+    print(f"False Positives (FP, {negative_label} misclassified as {positive_label}): {fp}")
+    print(f"False Negatives (FN, {positive_label} misclassified as {negative_label}): {fn}")
 
 # Load dataset
 dataset = pd.read_csv("all biner v3.csv", delimiter=";")
@@ -198,7 +197,18 @@ for i, dt_classifier in enumerate(dt_classifiers):
     print(f"Precision for {y.columns[i]} without Pre-pruning and Pruning (Information Gain):", precisions[i])
     print(f"Recall for {y.columns[i]} without Pre-pruning and Pruning (Information Gain):", recalls[i])
     print(f"Entropy for {y.columns[i]}: {entropies[y.columns[i]]}")
-    print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i])
+
+    # Inspecting unique values to determine labels
+    unique_values_test = y_test.iloc[:, i].unique()
+    unique_values_pred = np.unique(y_pred)
+    print(f"Unique values in y_test for {y.columns[i]}: {unique_values_test}")
+    print(f"Unique values in y_pred for {y.columns[i]}: {unique_values_pred}")
+
+    # Assuming binary classification, use the first two unique values as labels
+    positive_label = unique_values_test[0]
+    negative_label = unique_values_test[1]
+
+    print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i], positive_label=positive_label, negative_label=negative_label)
 
     # Menampilkan information gain untuk setiap atribut
     gains = information_gains[y.columns[i]]
@@ -217,7 +227,18 @@ for i, dt_classifier in enumerate(dt_classifiers):
 #     print(f"Precision for {y.columns[i]} with Pre-pruning (Information Gain):", precisions[i])
 #     print(f"Recall for {y.columns[i]} with Pre-pruning (Information Gain):", recalls[i])
 #     print(f"Entropy for {y.columns[i]}: {entropies[y.columns[i]]}")
-#     print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i])
+
+#     # Inspecting unique values to determine labels
+#     unique_values_test = y_test.iloc[:, i].unique()
+#     unique_values_pred = np.unique(y_pred)
+#     print(f"Unique values in y_test for {y.columns[i]}: {unique_values_test}")
+#     print(f"Unique values in y_pred for {y.columns[i]}: {unique_values_pred}")
+
+#     # Assuming binary classification, use the first two unique values as labels
+#     positive_label = unique_values_test[0]
+#     negative_label = unique_values_test[1]
+
+#     print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i], positive_label=positive_label, negative_label=negative_label)
 
 #     # Menampilkan information gain untuk setiap atribut
 #     gains = information_gains[y.columns[i]]
@@ -236,7 +257,18 @@ for i, dt_classifier in enumerate(dt_classifiers):
 #     print(f"Precision for {y.columns[i]} with Pruning (Information Gain):", precisions[i])
 #     print(f"Recall for {y.columns[i]} with Pruning (Information Gain):", recalls[i])
 #     print(f"Entropy for {y.columns[i]}: {entropies[y.columns[i]]}")
-#     print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i])
+
+#     # Inspecting unique values to determine labels
+#     unique_values_test = y_test.iloc[:, i].unique()
+#     unique_values_pred = np.unique(y_pred)
+#     print(f"Unique values in y_test for {y.columns[i]}: {unique_values_test}")
+#     print(f"Unique values in y_pred for {y.columns[i]}: {unique_values_pred}")
+
+#     # Assuming binary classification, use the first two unique values as labels
+#     positive_label = unique_values_test[0]
+#     negative_label = unique_values_test[1]
+
+#     print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i], positive_label=positive_label, negative_label=negative_label)
 
 #     # Menampilkan information gain untuk setiap atribut
 #     gains = information_gains[y.columns[i]]
@@ -256,7 +288,18 @@ for i, dt_classifier in enumerate(dt_classifiers):
 #     print(f"Precision for {y.columns[i]} with Pre-pruning and Pruning (Information Gain):", precisions[i])
 #     print(f"Recall for {y.columns[i]} with Pre-pruning and Pruning (Information Gain):", recalls[i])
 #     print(f"Entropy for {y.columns[i]}: {entropies[y.columns[i]]}")
-#     print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i])
+
+#     # Inspecting unique values to determine labels
+#     unique_values_test = y_test.iloc[:, i].unique()
+#     unique_values_pred = np.unique(y_pred)
+#     print(f"Unique values in y_test for {y.columns[i]}: {unique_values_test}")
+#     print(f"Unique values in y_pred for {y.columns[i]}: {unique_values_pred}")
+
+#     # Assuming binary classification, use the first two unique values as labels
+#     positive_label = unique_values_test[0]
+#     negative_label = unique_values_test[1]
+
+#     print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i], positive_label=positive_label, negative_label=negative_label)
 
 #     # Menampilkan information gain untuk setiap atribut
 #     gains = information_gains[y.columns[i]]

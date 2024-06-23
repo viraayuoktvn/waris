@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier, export_text
-from sklearn.metrics import accuracy_score, precision_score, recall_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix
 
 def gini_index(column):
     probabilities = column.value_counts(normalize=True)
@@ -159,6 +159,16 @@ def decision_tree_with_prepruning_pruning(X_train, y_train, X_test, y_test, max_
 
     return dt_classifiers, accuracies, precisions, recalls, gini_indices, gini_gains
 
+def print_confusion_matrix(y_test, y_pred, column_name, positive_label, negative_label):
+    cm = confusion_matrix(y_test, y_pred, labels=[positive_label, negative_label])
+    print(f"Confusion Matrix for {column_name}:")
+    print(cm)
+    tn, fp, fn, tp = cm.ravel()
+    print(f"True Positives (TP, {positive_label}): {tp}")
+    print(f"True Negatives (TN, {negative_label}): {tn}")
+    print(f"False Positives (FP, {negative_label} misclassified as {positive_label}): {fp}")
+    print(f"False Negatives (FN, {positive_label} misclassified as {negative_label}): {fn}")
+
 # Load dataset
 dataset = pd.read_csv("all biner v3.csv", delimiter=";")
 
@@ -175,11 +185,24 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 dt_classifiers, accuracies, precisions, recalls, gini_indices, gini_gains = decision_tree_without_pruning(X_train, y_train, X_test, y_test)
 for i, dt_classifier in enumerate(dt_classifiers):
     tree_rules = export_text(dt_classifier, feature_names=list(X.columns))
+    y_pred = dt_classifier.predict(X_test)
     print(f"Decision Tree Rules for {y.columns[i]} without Pre-pruning and Pruning (Gini impurity):\n", tree_rules)
     print(f"Accuracy for {y.columns[i]} without Pre-pruning and Pruning (Gini impurity):", accuracies[i])
     print(f"Precision for {y.columns[i]} without Pre-pruning and Pruning (Gini impurity):", precisions[i])
     print(f"Recall for {y.columns[i]} without Pre-pruning and Pruning (Gini impurity):", recalls[i])
     print(f"Gini index for {y.columns[i]}: {gini_indices[y.columns[i]]}")
+
+    # Inspecting unique values to determine labels
+    unique_values_test = y_test.iloc[:, i].unique()
+    unique_values_pred = np.unique(y_pred)
+    print(f"Unique values in y_test for {y.columns[i]}: {unique_values_test}")
+    print(f"Unique values in y_pred for {y.columns[i]}: {unique_values_pred}")
+
+    # Assuming binary classification, use the first two unique values as labels
+    positive_label = unique_values_test[0]
+    negative_label = unique_values_test[1]
+
+    print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i], positive_label=positive_label, negative_label=negative_label)
 
     # Menampilkan Gini gain untuk setiap atribut
     gains = gini_gains[y.columns[i]]
@@ -193,11 +216,24 @@ for i, dt_classifier in enumerate(dt_classifiers):
 # dt_classifiers, accuracies, precisions, recalls, gini_indices, gini_gains = decision_tree_with_prepruning(X_train, y_train, X_test, y_test, max_depth=10, min_samples_split=10)
 # for i, dt_classifier in enumerate(dt_classifiers):
 #     tree_rules = export_text(dt_classifier, feature_names=list(X.columns))
+#     y_pred = dt_classifier.predict(X_test)
 #     print(f"Decision Tree Rules for {y.columns[i]} with Pre-pruning (Gini impurity):\n", tree_rules)
 #     print(f"Accuracy for {y.columns[i]} with Pre-pruning (Gini impurity):", accuracies[i])
 #     print(f"Precision for {y.columns[i]} with Pre-pruning (Gini impurity):", precisions[i])
 #     print(f"Recall for {y.columns[i]} with Pre-pruning (Gini impurity):", recalls[i])
 #     print(f"Gini index for {y.columns[i]}: {gini_indices[y.columns[i]]}")
+
+#     # Inspecting unique values to determine labels
+#     unique_values_test = y_test.iloc[:, i].unique()
+#     unique_values_pred = np.unique(y_pred)
+#     print(f"Unique values in y_test for {y.columns[i]}: {unique_values_test}")
+#     print(f"Unique values in y_pred for {y.columns[i]}: {unique_values_pred}")
+
+#     # Assuming binary classification, use the first two unique values as labels
+#     positive_label = unique_values_test[0]
+#     negative_label = unique_values_test[1]
+
+#     print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i], positive_label=positive_label, negative_label=negative_label)
 
 #     # Menampilkan Gini gain untuk setiap atribut
 #     gains = gini_gains[y.columns[i]]
@@ -211,11 +247,24 @@ for i, dt_classifier in enumerate(dt_classifiers):
 # dt_classifiers, accuracies, precisions, recalls, gini_indices, gini_gains = decision_tree_with_pruning(X_train, y_train, X_test, y_test, ccp_alpha=0.01)
 # for i, dt_classifier in enumerate(dt_classifiers):
 #     tree_rules = export_text(dt_classifier, feature_names=list(X.columns))
+#     y_pred = dt_classifier.predict(X_test)
 #     print(f"Decision Tree Rules for {y.columns[i]} with Pruning (Gini impurity):\n", tree_rules)
 #     print(f"Accuracy for {y.columns[i]} with Pruning (Gini impurity):", accuracies[i])
 #     print(f"Precision for {y.columns[i]} with Pruning (Gini impurity):", precisions[i])
 #     print(f"Recall for {y.columns[i]} with Pruning (Gini impurity):", recalls[i])
 #     print(f"Gini index for {y.columns[i]}: {gini_indices[y.columns[i]]}")
+
+#     # Inspecting unique values to determine labels
+#     unique_values_test = y_test.iloc[:, i].unique()
+#     unique_values_pred = np.unique(y_pred)
+#     print(f"Unique values in y_test for {y.columns[i]}: {unique_values_test}")
+#     print(f"Unique values in y_pred for {y.columns[i]}: {unique_values_pred}")
+
+#     # Assuming binary classification, use the first two unique values as labels
+#     positive_label = unique_values_test[0]
+#     negative_label = unique_values_test[1]
+
+#     print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i], positive_label=positive_label, negative_label=negative_label)
 
 #     # Menampilkan Gini gain untuk setiap atribut
 #     gains = gini_gains[y.columns[i]]
@@ -229,11 +278,24 @@ for i, dt_classifier in enumerate(dt_classifiers):
 # dt_classifiers, accuracies, precisions, recalls, gini_indices, gini_gains = decision_tree_with_prepruning_pruning(X_train, y_train, X_test, y_test, max_depth=10, min_samples_split=10, ccp_alpha=0.01)
 # for i, dt_classifier in enumerate(dt_classifiers):
 #     tree_rules = export_text(dt_classifier, feature_names=list(X.columns))
+#     y_pred = dt_classifier.predict(X_test)
 #     print(f"Decision Tree Rules for {y.columns[i]} with Pre-pruning and Pruning (Gini impurity):\n", tree_rules)
 #     print(f"Accuracy for {y.columns[i]} with Pre-pruning and Pruning (Gini impurity):", accuracies[i])
 #     print(f"Precision for {y.columns[i]} with Pre-pruning and Pruning (Gini impurity):", precisions[i])
 #     print(f"Recall for {y.columns[i]} with Pre-pruning and Pruning (Gini impurity):", recalls[i])
 #     print(f"Gini index for {y.columns[i]}: {gini_indices[y.columns[i]]}")
+
+#     # Inspecting unique values to determine labels
+#     unique_values_test = y_test.iloc[:, i].unique()
+#     unique_values_pred = np.unique(y_pred)
+#     print(f"Unique values in y_test for {y.columns[i]}: {unique_values_test}")
+#     print(f"Unique values in y_pred for {y.columns[i]}: {unique_values_pred}")
+
+#     # Assuming binary classification, use the first two unique values as labels
+#     positive_label = unique_values_test[0]
+#     negative_label = unique_values_test[1]
+
+#     print_confusion_matrix(y_test.iloc[:, i], y_pred, y.columns[i], positive_label=positive_label, negative_label=negative_label)
 
 #     # Menampilkan Gini gain untuk setiap atribut
 #     gains = gini_gains[y.columns[i]]
