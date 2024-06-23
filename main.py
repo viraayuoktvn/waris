@@ -121,18 +121,26 @@ class InheritanceApp:
         style.configure('TEntry', font=self.default_font)
 
     def create_custom_label(self, parent, text, row):
+        # Memisahkan Teks Label dan Asterisk
         label_text, asterisk = text.split('*')
+
+        # Membuat Frame untuk Label
         label_frame = ttk.Frame(parent)
         label_frame.grid(row=row, column=0, pady=2, padx=(7, 20), sticky=tk.E)
 
+        # Membuat dan Menambahkan Label Teks
         label = ttk.Label(label_frame, text=label_text, font=self.label_font)
         label.pack(side=tk.LEFT)
 
+        # Membuat dan Menambahkan Label Asterisk
         asterisk_label = ttk.Label(label_frame, text='*', font=self.label_font, foreground='red')
         asterisk_label.pack(side=tk.LEFT)
 
     def create_entry(self, parent, row):
+        # Membuat Entry Widget
         entry = ttk.Entry(parent, font=self.default_font, width=20)
+
+        # Menempatkan Entry dalam Grid Layout
         entry.grid(row=row, column=1, pady=2, padx=(20, 7), sticky=tk.W)
         return entry
 
@@ -151,6 +159,8 @@ class InheritanceApp:
         
         predictors_df = pd.DataFrame([predictors], columns=feature_names)
         model = dt_model['model']
+
+        # Memprediksi Probabilitas
         prediction_proba = model.predict_proba(predictors_df)[0]
         
         return 'TIDAK DAPAT' if prediction_proba[1] >= 0.5 else 'DAPAT'
@@ -244,6 +254,7 @@ class InheritanceApp:
                         'total_sdlk', 'total_sdpk']
         predictors = [family_members[feature] for feature in feature_names]
         
+        # Iterasi melalui Anggota Keluarga
         for relationship, _ in family_members.items():
             if relationship.startswith("total_"):
                 prediction_key = relationship.replace("total_", "hw_")
@@ -255,13 +266,14 @@ class InheritanceApp:
                 inheritance_status[relationship] = prediction
         
         self.display_results(total_inheritance, inheritance_status, family_members)
-
     
     def display_results(self, total_inheritance, inheritance_status, family_members):
+        # Membersihkan dan Mengisi result_text
         self.result_text.delete(1.0, tk.END)
         self.result_text.insert(tk.END, f"Total harta warisan yang dibagi: {total_inheritance}\n")
         self.result_text.insert(tk.END, "Bagian masing-masing ahli waris:\n")
 
+        # Mengambil Nilai dari family_members
         suami = family_members.get("total_suami", 0)
         istri = family_members.get("total_istri", 0)
         anak_laki = family_members.get("total_al", 0)
@@ -290,6 +302,7 @@ class InheritanceApp:
         share_sdlk = 0
         share_sdpk = 0
 
+        # Menghitung dan Menampilkan Bagian Warisan
         for relationship, status in inheritance_status.items():
             if relationship == "total_suami" and status == "DAPAT":
                 share_suami = calc.hitung_bagian_suami(suami, anak_laki, anak_perempuan, cucu_laki, cucu_perempuan, ayah, kakek, ibu, nenek, saudara_laki_kandung, saudara_seibu, saudara_perempuan_kandung, total_inheritance)
