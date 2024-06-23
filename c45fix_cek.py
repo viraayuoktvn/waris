@@ -316,9 +316,10 @@ def dt_c45(Xdata, ydata, pre_pruning, post_pruning, chi_lim=0.1, min_lim=10):
         pruned_rules.append(rule[-1])
         rule = pruned_rules
 
+    # Menambahkan Informasi Tambahan pada Aturan
     rule.append("Total Number of Rules: " + str(len(rule)))
     rule.append(dataset.agg(lambda x: x.value_counts().index[0])[0])
-    
+
     return rule, gain_ratios_dict
 
 data = pd.read_csv('all biner v3.csv', sep=';')
