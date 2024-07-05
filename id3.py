@@ -132,15 +132,15 @@ y = dataset[['hw_ap', 'hw_al', 'hw_cp', 'hw_cl', 'hw_suami', 'hw_istri', 'hw_aya
 # Membagi dataset menjadi data latih dan data uji
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Decision tree tanpa pre-pruning dan pruning
-dt_classifiers, accuracies, precisions, recalls = decision_tree_without_pruning(X_train, y_train, X_test, y_test)
-for i, dt_classifier in enumerate(dt_classifiers):
-    tree_rules = export_text(dt_classifier, feature_names=list(X.columns))
-    print(f"Decision Tree Rules for {y.columns[i]} without Pre-pruning and Pruning (Information Gain):\n", tree_rules)
-    print(f"Accuracy for {y.columns[i]} without Pre-pruning and Pruning (Information Gain):", accuracies[i])
-    print(f"Precision for {y.columns[i]} without Pre-pruning and Pruning (Information Gain):", precisions[i])
-    print(f"Recall for {y.columns[i]} without Pre-pruning and Pruning (Information Gain):", recalls[i])
-    print("\n")
+# # Decision tree tanpa pre-pruning dan pruning
+# dt_classifiers, accuracies, precisions, recalls = decision_tree_without_pruning(X_train, y_train, X_test, y_test)
+# for i, dt_classifier in enumerate(dt_classifiers):
+#     tree_rules = export_text(dt_classifier, feature_names=list(X.columns))
+#     print(f"Decision Tree Rules for {y.columns[i]} without Pre-pruning and Pruning (Information Gain):\n", tree_rules)
+#     print(f"Accuracy for {y.columns[i]} without Pre-pruning and Pruning (Information Gain):", accuracies[i])
+#     print(f"Precision for {y.columns[i]} without Pre-pruning and Pruning (Information Gain):", precisions[i])
+#     print(f"Recall for {y.columns[i]} without Pre-pruning and Pruning (Information Gain):", recalls[i])
+#     print("\n")
 
 # Decision tree dengan pre-pruning
 dt_classifiers, accuracies, precisions, recalls = decision_tree_with_prepruning(X_train, y_train, X_test, y_test, max_depth=10, min_samples_split=10)
@@ -152,23 +152,23 @@ for i, dt_classifier in enumerate(dt_classifiers):
     print(f"Recall for {y.columns[i]} with Pre-pruning (Information Gain):", recalls[i])
     print("\n")
 
-# Decision tree dengan pruning
-dt_classifiers, accuracies, precisions, recalls = decision_tree_with_pruning(X_train, y_train, X_test, y_test, ccp_alpha=0.01)
-for i, dt_classifier in enumerate(dt_classifiers):
-    tree_rules = export_text(dt_classifier, feature_names=list(X.columns))
-    print(f"Decision Tree Rules for {y.columns[i]} with Pruning (Information Gain):\n", tree_rules)
-    print(f"Accuracy for {y.columns[i]} with Pruning (Information Gain):", accuracies[i])
-    print(f"Precision for {y.columns[i]} with Pruning (Information Gain):", precisions[i])
-    print(f"Recall for {y.columns[i]} with Pruning (Information Gain):", recalls[i])
-    print("\n")
+# # Decision tree dengan pruning
+# dt_classifiers, accuracies, precisions, recalls = decision_tree_with_pruning(X_train, y_train, X_test, y_test, ccp_alpha=0.01)
+# for i, dt_classifier in enumerate(dt_classifiers):
+#     tree_rules = export_text(dt_classifier, feature_names=list(X.columns))
+#     print(f"Decision Tree Rules for {y.columns[i]} with Pruning (Information Gain):\n", tree_rules)
+#     print(f"Accuracy for {y.columns[i]} with Pruning (Information Gain):", accuracies[i])
+#     print(f"Precision for {y.columns[i]} with Pruning (Information Gain):", precisions[i])
+#     print(f"Recall for {y.columns[i]} with Pruning (Information Gain):", recalls[i])
+#     print("\n")
 
-# Decision tree dengan pre-pruning dan pruning
-dt_classifiers, accuracies, precisions, recalls = decision_tree_with_prepruning_pruning(X_train, y_train, X_test, y_test, max_depth=10, min_samples_split=10, ccp_alpha=0.01)
-for i, dt_classifier in enumerate(dt_classifiers):
-    tree_rules = export_text(dt_classifier, feature_names=list(X.columns))
+# # Decision tree dengan pre-pruning dan pruning
+# dt_classifiers, accuracies, precisions, recalls = decision_tree_with_prepruning_pruning(X_train, y_train, X_test, y_test, max_depth=10, min_samples_split=10, ccp_alpha=0.01)
+# for i, dt_classifier in enumerate(dt_classifiers):
+#     tree_rules = export_text(dt_classifier, feature_names=list(X.columns))
     
-    print(f"Decision Tree Rules for {y.columns[i]} with Pre-pruning and Pruning (Information Gain):\n", tree_rules)
-    print(f"Accuracy for {y.columns[i]} with Pre-pruning and Pruning (Information Gain):", accuracies[i])
-    print(f"Precision for {y.columns[i]} with Pre-pruning and Pruning (Information Gain):", precisions[i])
-    print(f"Recall for {y.columns[i]} with Pre-pruning and Pruning (Information Gain):", recalls[i])
-    print("\n")
+#     print(f"Decision Tree Rules for {y.columns[i]} with Pre-pruning and Pruning (Information Gain):\n", tree_rules)
+#     print(f"Accuracy for {y.columns[i]} with Pre-pruning and Pruning (Information Gain):", accuracies[i])
+#     print(f"Precision for {y.columns[i]} with Pre-pruning and Pruning (Information Gain):", precisions[i])
+#     print(f"Recall for {y.columns[i]} with Pre-pruning and Pruning (Information Gain):", recalls[i])
+#     print("\n")

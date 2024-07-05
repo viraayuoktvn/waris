@@ -117,7 +117,7 @@ def hitung_bagian_ayah(ayah, anak_laki, anak_perempuan, cucu_laki, cucu_perempua
         share_nenek = hitung_bagian_nenek(nenek, ibu, anak_laki, anak_perempuan, cucu_laki, cucu_perempuan, suami, istri, ayah, kakek, saudara_seibu, saudara_laki_kandung, saudara_perempuan_kandung, total_inheritance, share_suami, share_istri)
         
         if anak_laki == 0 and anak_perempuan == 0 and cucu_laki == 0 and cucu_perempuan == 0:
-            if suami == 0 and istri == 0 and ibu == 0 and kakek == 0 and nenek == 0 and saudara_seibu == 0 and saudara_laki_kandung == 0 and saudara_perempuan_kandung == 0:
+            if suami == 0 and istri == 0 and ibu == 0 and kakek == 0 and nenek == 0:
                 share_ayah = total_inheritance
             if ibu > 0 or suami > 0 or istri > 0 or nenek > 0:
                 share_ayah = total_inheritance - (share_suami + share_istri + share_ibu + share_nenek)
@@ -347,8 +347,8 @@ def hitung_bagian_kakek(kakek, ayah, anak_laki, anak_perempuan, cucu_laki, cucu_
         share_ibu = hitung_bagian_ibu(ibu, anak_laki, anak_perempuan, cucu_laki, cucu_perempuan, suami, istri, ayah, kakek, nenek, saudara_seibu, saudara_laki_kandung, saudara_perempuan_kandung, total_inheritance, share_suami, share_istri)
         share_nenek = hitung_bagian_nenek(nenek, ibu, anak_laki, anak_perempuan, cucu_laki, cucu_perempuan, suami, istri, ayah, kakek, saudara_seibu, saudara_laki_kandung, saudara_perempuan_kandung, total_inheritance, share_suami, share_istri)
     
-        if anak_laki == 0 and anak_perempuan == 0 and cucu_laki == 0 and cucu_perempuan == 0 and saudara_laki_kandung == 0 and saudara_perempuan_kandung == 0:
-            if suami == 0 and istri == 0 and ayah == 0 and ibu == 0 and nenek == 0 and saudara_seibu == 0:
+        if anak_laki == 0 and anak_perempuan == 0 and cucu_laki == 0 and cucu_perempuan == 0:
+            if suami == 0 and istri == 0 and ayah == 0 and ibu == 0 and nenek == 0:
                 share_kakek = total_inheritance
             if (ibu > 0 or suami > 0 or istri > 0 or nenek > 0):
                 share_kakek = total_inheritance - (share_suami + share_istri + share_ibu + share_nenek)

@@ -1,6 +1,7 @@
 import pandas as pd
 import pickle
 import calc
+import time
 
 # Memuat model
 def load_model(filename):
@@ -155,6 +156,8 @@ def main():
     share_sdlk = 0
     share_sdpk = 0
 
+    start_time = time.time()
+
     print("Total harta warisan yang dibagi: ", total_inheritance)
     print("Bagian masing-masing ahli waris:")
 
@@ -199,5 +202,9 @@ def main():
         if relationship == "total_sdpk" and status == "DAPAT": # Saudara kandung perempuan
             share_sdpk = calc.hitung_bagian_sdpk(total_inheritance, share_suami, share_istri, share_ayah, share_ibu, share_kakek, share_nenek, share_ap, share_cp, share_si, saudara_seibu, saudara_laki_kandung, saudara_perempuan_kandung, anak_laki, cucu_laki, ayah, kakek, suami, istri, ibu, nenek, anak_perempuan, cucu_perempuan) 
             print("Saudara perempuan kandung: {:.2f}".format(share_sdpk))
+
+    end_time = time.time()
+    print(f"Waktu eksekusi perhitungan bagian ahli waris: {end_time - start_time} detik")
+
 if __name__ == "__main__":
     main()
